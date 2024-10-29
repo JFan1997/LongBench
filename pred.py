@@ -5,8 +5,10 @@ import json
 from transformers import (
     AutoTokenizer,
     LlamaTokenizer,
-    LlamaForCausalLM,
+    GemmaTokenizer,
     AutoModelForCausalLM,
+    LlamaForCausalLM,
+    GemmaForCausalLM,
 )
 from tqdm import tqdm
 import numpy as np
@@ -19,7 +21,7 @@ import torch.multiprocessing as mp
 # Import SelfExtend
 import sys
 
-sys.path.insert(0, "/afs/crc.nd.edu/user/y/yyuan4/Private/LongLM/")
+sys.path.insert(0, "../LongLM/")
 import SelfExtend
 
 
@@ -39,6 +41,8 @@ def parse_args(args=None):
             "chatglm3-6b-32k",
             "vicuna-v1.5-7b-16k",
             "phi-2",
+            "gemma-2b",
+            "gemma-2-2b",
         ],
     )
     parser.add_argument("--e", action="store_true", help="Evaluate on LB-E")
@@ -193,6 +197,11 @@ def load_model_and_tokenizer(path, model_name, device, apply_se):
         tokenizer = AutoTokenizer.from_pretrained(path, trust_remote_code=True)
         model = AutoModelForCausalLM.from_pretrained(
             path, trust_remote_code=True, torch_dtype=torch.bfloat16
+        ).to(device)
+    elif "gemma" in model_name:
+        tokenizer = GemmaTokenizer.from_pretrained(path, trust_remote_code=True)
+        model = GemmaForCausalLM.from_pretrained(
+            path, trust_remote_code=True, torch_dtype=torch.float16
         ).to(device)
     elif "llama2" in model_name:
         replace_llama_attn_with_flash_attn()

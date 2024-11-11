@@ -40,10 +40,10 @@ def parse_args(args=None):
             "chatglm2-6b-32k",
             "chatglm3-6b-32k",
             "vicuna-v1.5-7b-16k",
-            "phi-1.5",
-            "phi-2",
+            "phi1.5-1b",
+            "phi2",
             "gemma-2b",
-            "gemma-2-2b",
+            "gemma2-2b",
             "llama3.2-1b",
             "llama3.2-3b",
         ],
@@ -217,7 +217,7 @@ def load_model_and_tokenizer(path, model_name, device, apply_se):
     #         trust_remote_code=True,
     #         torch_dtype=torch.float16,  # NOTE: bfloat16 causes error
     #     ).to(device)
-    elif "llama2" in model_name:
+    elif "llama2" in model_name or "llama3" in model_name:
         replace_llama_attn_with_flash_attn()
         tokenizer = LlamaTokenizer.from_pretrained(path)
         model = LlamaForCausalLM.from_pretrained(

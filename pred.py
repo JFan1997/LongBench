@@ -46,6 +46,7 @@ def parse_args(args=None):
             "gemma2-2b",
             "llama3.2-1b",
             "llama3.2-3b",
+            "pythia-1.4b",
         ],
     )
     parser.add_argument("--e", action="store_true", help="Evaluate on LB-E")
@@ -66,7 +67,7 @@ def build_chat(tokenizer, prompt, model_name):
         conv.append_message(conv.roles[0], prompt)
         conv.append_message(conv.roles[1], None)
         prompt = conv.get_prompt()
-    elif "llama2" in model_name:
+    elif "llama" in model_name:  # elif "llama2" in model_name:
         prompt = f"[INST]{prompt}[/INST]"
     elif "xgen" in model_name:
         header = (
@@ -159,13 +160,23 @@ def get_pred(
                 ],
             )[0]
         else:
-            output = model.generate(
-                **input,
-                max_new_tokens=max_gen,
-                num_beams=1,
-                do_sample=False,
-                temperature=1.0,
-            )[0]
+            if "pythia" in model_name:
+                output = model.generate(
+                    **input,
+                    max_new_tokens=max_gen,
+                    num_beams=1,
+                    do_sample=False,
+                    temperature=1.0,
+                    pad_token_id=tokenizer.eos_token_id,
+                )[0]
+            else:
+                output = model.generate(
+                    **input,
+                    max_new_tokens=max_gen,
+                    num_beams=1,
+                    do_sample=False,
+                    temperature=1.0,
+                )[0]
         pred = tokenizer.decode(output[context_length:], skip_special_tokens=True)
         pred = post_process(pred, model_name)
         with open(out_path, "a", encoding="utf-8") as f:
@@ -201,10 +212,15 @@ def load_model_and_tokenizer(path, model_name, device, apply_se):
         or "xgen" in model_name
         or "phi" in model_name
         or "gemma" in model_name
+        or "pythia" in model_name
     ):
         tokenizer = AutoTokenizer.from_pretrained(path, trust_remote_code=True)
         model = AutoModelForCausalLM.from_pretrained(
-            path, trust_remote_code=True, torch_dtype=torch.bfloat16
+            path,
+            trust_remote_code=True,
+            torch_dtype=torch.bfloat16,
+            # use_flash_attention_2=True,
+            # attn_implementation="flash_attention_2",
         ).to(device)
     # elif "gemma" in model_name:
     #     tokenizer = GemmaTokenizer.from_pretrained(
@@ -217,10 +233,17 @@ def load_model_and_tokenizer(path, model_name, device, apply_se):
     #         trust_remote_code=True,
     #         torch_dtype=torch.float16,  # NOTE: bfloat16 causes error
     #     ).to(device)
-    elif "llama2" in model_name or "llama3" in model_name:
+    elif "llama2" in model_name:
         replace_llama_attn_with_flash_attn()
         tokenizer = LlamaTokenizer.from_pretrained(path)
         model = LlamaForCausalLM.from_pretrained(
+            path,
+            torch_dtype=torch.bfloat16,
+        ).to(device)
+    elif "llama3" in model_name:
+        replace_llama_attn_with_flash_attn()
+        tokenizer = AutoTokenizer.from_pretrained(path)
+        model = AutoModelForCausalLM.from_pretrained(
             path,
             torch_dtype=torch.bfloat16,
         ).to(device)
@@ -248,7 +271,7 @@ def load_model_and_tokenizer(path, model_name, device, apply_se):
             model,
             group_size=8,
             window_size=1024,
-            enable_flash_attention=False,
+            enable_flash_attention=("llama" in model_name),
             # flash_attention_impl="flash_attn",
         )
         print("SelfExtend with flash attention applied to model")
@@ -272,18 +295,18 @@ if __name__ == "__main__":
     if args.e:
         datasets = [
             "qasper",
-            "multifieldqa_en",
-            "hotpotqa",
-            "2wikimqa",
-            "gov_report",
-            "multi_news",
-            "trec",
-            "triviaqa",
-            "samsum",
-            "passage_count",
-            "passage_retrieval_en",
-            "lcc",
-            "repobench-p",
+            # "multifieldqa_en",
+            # "hotpotqa",
+            # "2wikimqa",
+            # "gov_report",
+            # "multi_news",
+            # "trec",
+            # "triviaqa",
+            # "samsum",
+            # "passage_count",
+            # "passage_retrieval_en",
+            # "lcc",
+            # "repobench-p",
         ]
     else:
         datasets = [

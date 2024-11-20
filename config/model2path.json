@@ -12,5 +12,6 @@
     "gemma-2b": "google/gemma-2b",
     "gemma2-2b": "google/gemma-2-2b",
     "llama3.2-1b": "meta-llama/Llama-3.2-1B",
-    "llama3.2-3b": "meta-llama/Llama-3.2-3B"
+    "llama3.2-3b": "meta-llama/Llama-3.2-3B",
+    "pythia-1.4b": "EleutherAI/pythia-1.4b"
 }

@@ -41,7 +41,7 @@ def parse_args(args=None):
             "chatglm3-6b-32k",
             "vicuna-v1.5-7b-16k",
             "phi1.5-1b",
-            "phi2",
+            "phi2-3b",
             "gemma-2b",
             "gemma2-2b",
             "llama3.2-1b",
@@ -272,7 +272,7 @@ def load_model_and_tokenizer(path, model_name, device, apply_se):
             group_size=8,
             window_size=1024,
             enable_flash_attention=("llama" in model_name),
-            # flash_attention_impl="flash_attn",
+            flash_attention_impl="flash_attn",
         )
         print("SelfExtend with flash attention applied to model")
     return model, tokenizer

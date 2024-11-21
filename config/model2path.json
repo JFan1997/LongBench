@@ -7,7 +7,7 @@
     "chatglm2-6b-32k": "THUDM/chatglm2-6b-32k",
     "chatglm3-6b-32k": "THUDM/chatglm3-6b-32k",
     "vicuna-v1.5-7b-16k": "lmsys/vicuna-7b-v1.5-16k",
-    "phi1.5-1b": "microsoft.phi-1_5",
+    "phi1.5-1b": "microsoft/phi-1_5",
     "phi2-3b": "microsoft/phi-2",
     "gemma-2b": "google/gemma-2b",
     "gemma2-2b": "google/gemma-2-2b",

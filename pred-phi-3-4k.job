@@ -5,8 +5,8 @@
 #$ -pe smp 16
 #$ -q gpu@@crc_gpu
 #$ -l gpu_card=2
-#$ -N pred1
-#$ -o pred1.o
+#$ -N phi-3-mini-4k-3.8b
+#$ -o phi-3-mini-4k-3.8b.o
 
 echo 'This script is run with 2 gpus'
 

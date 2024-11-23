@@ -47,6 +47,7 @@ def parse_args(args=None):
             "llama3.2-1b",
             "llama3.2-3b",
             "pythia-1.4b",
+            "phi-3-mini-4k-3.8b",
         ],
     )
     parser.add_argument("--e", action="store_true", help="Evaluate on LB-E")

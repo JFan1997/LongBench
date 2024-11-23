@@ -1,0 +1,13 @@
+{
+    "qasper": 4.71,
+    "multifieldqa_en": 8.33,
+    "multifieldqa_zh": 8.92,
+    "2wikimqa": 0.0,
+    "multi_news": 16.0,
+    "vcsum": 1.65,
+    "trec": 20.0,
+    "triviaqa": 0.0,
+    "samsum": 30.43,
+    "passage_retrieval_zh": 0.93,
+    "lcc": 57.13
+}

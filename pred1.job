@@ -12,8 +12,7 @@ echo 'This script is run with 4 gpus'
 
 
 conda activate LLM
-
-python pred.py --model phi-1.5
+python pred.py --model 
 
 echo 'Script completed'
 

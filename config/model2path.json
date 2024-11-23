@@ -14,5 +14,5 @@
     "llama3.2-1b": "meta-llama/Llama-3.2-1B",
     "llama3.2-3b": "meta-llama/Llama-3.2-3B",
     "pythia-1.4b": "EleutherAI/pythia-1.4b",
-    "phi-3-mini-4k-3.8b": "microsoft/microsoft/Phi-3-mini-4k-instruct"
+    "phi-3-mini-4k-3.8b": "microsoft/Phi-3-mini-4k-instruct"
 }

@@ -1,0 +1,19 @@
+#!/bin/bash
+
+#$ -M jfan5@nd.edu
+#$ -m ae
+#$ -pe smp 16
+#$ -q gpu@@crc_gpu
+#$ -l gpu_card=2
+#$ -N pred1
+#$ -o pred1.o
+
+echo 'This script is run with 2 gpus'
+
+
+conda activate LLM
+
+python pred.py --model phi-3-mini-4k-3.8b
+
+echo 'Script completed'
+
